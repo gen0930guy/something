@@ -1,0 +1,345 @@
+{
+            "you": [["ye", 1]],
+            "your": [["yer", 1]],
+            "yours": [["yers", 1]],
+            "yourself": [["yerself", 1]],
+            "i": [["me", 1]],
+            "im": [["me", 1]],
+            "me": [["meself", 1]],
+
+
+            "are": [["be", 1]],
+            "am": [["be", 1]],
+            "is": [["be", 1]],
+            "was": [["were", 1]],
+            "were": [["were", 1]],
+            "do": [["d'", 1]],
+            "does": [["d'", 1]],
+            "did": [["didst", 1]],
+            "because": [["cause", 0.5], ["cuz'", 0.5]],
+           "the": [["ze", 0.3], ["th", 0.3], ["da", 0.4]],
+
+
+            "go": [["set sail", 1]],
+            "went": [["sailed", 1]],
+            "come": [["come aboard", 1]],
+            "came": [["came aboard", 1]],
+
+
+            "friend": [["matey", 1]],
+            "twin": [["matey", 1]],
+            "friends": [["crew", 1]],
+            "everyone": [["all hands", 1]],
+            "people": [["souls", 1]],
+            "man": [["scallywag", 1]],
+            "men": [["scallywags", 1]],
+            "woman": [["lass", 1]],
+            "women": [["lasses", 1]],
+            "loser": [["plank walker", 1]],
+            "bullshit": [["tomfoolery", 1]],
+
+
+            "hello": [["ahoy", 0.5], ["ahoy there", 0.3], ["greetings, landlubber", 0.2]],
+            "hi": [["ahoy", 0.5], ["yo-ho-ho", 0.3], ["ahoy there", 0.2]],
+            "hey": [["ahoy there", 0.6], ["ahoy", 0.4]],
+            "yo": [["yo-ho-ho", 0.7], ["ahoy", 0.3]],
+
+
+            "yes": [["aye", 0.6], ["aye aye", 0.3], ["indeed", 0.1]],
+            "yeah": [["aye", 0.5], ["aye aye", 0.5]],
+            "ok": [["aye aye", 0.7], ["aye", 0.3]],
+            "okay": [["aye aye", 0.7], ["aye", 0.3]],
+            "no": [["nay", 0.3], ["never!", 0.3], ["nuh uh", 0.4]],
+            "nope": [["nay", 0.5], ["nuh uh!", 0.5]],
+
+
+            "happy": [["jolly", 0.5], ["jumpin' w' joy!", 0.5]],
+            "sad": [["down in th' bilge", 1]],
+            "scared": [["shiverin' me timbers", 1]],
+
+
+            "money": [["booty", 1]],
+            "coins": [["dabloons", 1]],
+            "food": [["grub", 1]],
+            "drink": [["grog", 1]],
+            "beer": [["grog", 1]],
+            "rum": [["rum (aye, the good stuff)", 1]],
+
+
+            "home": [["quarters", 1]],
+            "house": [["ship", 1]],
+
+
+            "phone": [["parrot communicator", 1]],
+            "computer": [["magic thinkin' box", 1]],
+
+
+            "stop": [["avast", 1]],
+            "wait": [["belay that", 1]],
+            "look": [["spy", 1]],
+            "see": [["lay eyes on", 1]],
+            "think": [["reckon", 1]],
+            "know": [["be knowin'", 1]],
+            "ragebait": [["baitin' a quarrel", 1]],
+
+
+            "idiot": [["bilge rat", 1]],
+            "stupid": [["addled-brained", 1]],
+            "larp": [["playin' at pirate, no true buccaneer", 1]],
+            "slimed": [["foul treachery", 1]],
+           "sybau": [["hold yer tongue, ye scallywag", 1]],
+
+
+            "lol": [["yo-ho-ho", 0.5], ["har har", 0.5]],
+            "lmao": [["yo-ho-ho", 0.5], ["that be rich", 0.5]],
+            "wtf": [["what in the seven seas?!", 1]],
+            "what the fuck": [["what in the seven seas?!", 1]],
+
+
+            "fire": [["blazin' like a broadside", 1]],
+            "lit": [["burnin' bright as a beacon", 1]],
+            "goat": [["legend o' the seas", 1]],
+            "sus": [["fishy as rotten cod", 1]],
+            "bitch": [["worm", 1]],
+
+
+            "im cooked": [["i be utterly shipwrecked", 1]],
+            "im fried": [["i be utterly shipwrecked", 1]],
+            "lets go": [["hoist the sails!", 1]],
+            "no way": [["by the kraken!", 1]],
+            "what": [["what sorcery be this", 1]],
+
+
+            "fight": [["duel", 1]],
+            "kill": [["end", 1]],
+            "danger": [["treacherous waters", 1]]
+
+                "my": [["me own", 1]],
+    "mine": [["me own", 1]],
+    "we": [["we crew", 1]],
+    "us": [["us crew", 1]],
+    "our": [["our crew's", 1]],
+    "ours": [["ours, by the code", 1]],
+
+    "them": [["'em", 1]],
+    "their": [["their cursed", 1]],
+    "theirs": [["theirs, plundered", 1]],
+
+    "this": [["this here", 1]],
+    "that": [["that there", 1]],
+    "these": [["these here", 1]],
+    "those": [["those there", 1]],
+
+    "get": [["haul", 1]],
+    "got": [["hauled", 1]],
+    "getting": [["haulin'", 1]],
+
+    "make": [["forge", 1]],
+    "made": [["forged", 1]],
+
+    "take": [["seize", 1]],
+    "took": [["seized", 1]],
+
+    "give": [["hand over", 1]],
+    "gave": [["handed over", 1]],
+
+    "find": [["unearth", 1]],
+    "found": [["unearthed", 1]],
+
+    "keep": [["stash", 1]],
+    "kept": [["stashed", 1]],
+
+    "leave": [["abandon ship", 1]],
+    "left": [["abandoned ship", 1]],
+
+    "run": [["make haste", 1]],
+    "ran": [["made haste", 1]],
+
+    "walk": [["stroll the deck", 1]],
+    "walking": [["strollin' the deck", 1]],
+
+    "talk": [["parley", 1]],
+    "talking": [["parleyin'", 1]],
+
+    "say": [["utter", 1]],
+    "said": [["uttered", 1]],
+
+    "tell": [["spin the tale", 1]],
+    "told": [["spun the tale", 1]],
+
+    "ask": [["put forth", 1]],
+    "asked": [["put forth", 1]],
+
+    "help": [["lend a hand", 1]],
+    "helping": [["lendin' a hand", 1]],
+
+    "work": [["toil", 1]],
+    "working": [["toilin'", 1]],
+
+    "job": [["duty", 1]],
+
+    "sleep": [["catch some shuteye in the hammock", 1]],
+    "sleeping": [["catchin' shuteye", 1]],
+
+    "wake": [["rouse", 1]],
+    "woke": [["roused", 1]],
+
+    "eat": [["feast", 1]],
+    "ate": [["feasted", 1]],
+
+    "buy": [["trade for", 1]],
+    "bought": [["traded for", 1]],
+
+    "sell": [["barter away", 1]],
+    "sold": [["bartered away", 1]],
+
+    "pay": [["hand over booty", 1]],
+    "paid": [["handed over booty", 1]],
+
+    "steal": [["plunder", 1]],
+    "stole": [["plundered", 1]],
+
+    "win": [["claim victory", 1]],
+    "won": [["claimed victory", 1]],
+
+    "lose": [["be bested", 1]],
+    "lost": [["were bested", 1]],
+
+    "start": [["set course", 1]],
+    "started": [["set course", 1]],
+
+    "end": [["meet yer end", 1]],
+    "ending": [["meetin' yer end", 1]],
+
+    "open": [["unseal", 1]],
+    "opened": [["unsealed", 1]],
+
+    "close": [["seal shut", 1]],
+    "closed": [["sealed shut", 1]],
+
+    "push": [["shove", 1]],
+    "pull": [["haul", 1]],
+
+    "throw": [["hurl", 1]],
+    "threw": [["hurled", 1]],
+
+    "catch": [["snag", 1]],
+    "caught": [["snagged", 1]],
+
+    "hold": [["grip tight", 1]],
+    "held": [["gripped tight", 1]],
+
+    "bring": [["haul aboard", 1]],
+    "brought": [["hauled aboard", 1]],
+
+    "send": [["dispatch", 1]],
+    "sent": [["dispatched", 1]],
+
+    "use": [["make use o'", 1]],
+    "used": [["made use o'", 1]],
+
+    "try": [["give it a go", 1]],
+    "tried": [["gave it a go", 1]],
+
+    "need": [["be needin'", 1]],
+    "want": [["be wantin'", 1]],
+
+    "like": [["fancy", 1]],
+    "love": [["hold dear", 1]],
+    "hate": [["despise", 1]],
+
+    "good": [["fine as aged rum", 1]],
+    "bad": [["rotten to the core", 1]],
+    "great": [["legendary", 1]],
+    "terrible": [["cursed", 1]],
+
+    "big": [["mighty", 1]],
+    "small": [["puny", 1]],
+
+    "fast": [["swift as the wind", 1]],
+    "slow": [["draggin' anchor", 1]],
+
+    "old": [["weathered", 1]],
+    "new": [["fresh off the docks", 1]],
+
+    "strong": [["iron-willed", 1]],
+    "weak": [["spineless", 1]],
+
+    "hot": [["scorchin'", 1]],
+    "cold": [["chill as the deep", 1]],
+
+    "dark": [["black as the abyss", 1]],
+    "light": [["bright as a lighthouse", 1]],
+
+    "early": [["at first light", 1]],
+    "late": [["past moonrise", 1]],
+
+    "now": [["this very tide", 1]],
+    "later": [["when the tide turns", 1]],
+    "soon": [["right quick", 1]],
+
+    "always": [["evermore", 1]],
+    "never": [["not in a hundred tides", 1]],
+
+    "maybe": [["mayhap", 1]],
+    "probably": [["likely as not", 1]],
+
+    "very": [["right", 1]],
+    "really": [["truly", 1]],
+
+    "here": [["aboard here", 1]],
+    "there": [["off yonder", 1]],
+    "where": [["whereabouts", 1]],
+
+    "why": [["for what reason", 1]],
+    "how": [["how so", 1]],
+
+    "again": [["once more", 1]],
+    "together": [["as one crew", 1]],
+
+    "alone": [["on me own", 1]],
+
+    "enemy": [["foe o' the seas", 1]],
+    "boss": [["captain", 1]],
+    "leader": [["captain", 1]],
+
+    "team": [["crew", 1]],
+
+    "game": [["contest o' skill", 1]],
+    "winrate": [["rate o' victories", 1]],
+
+    "internet": [["the vast ether", 1]],
+    "server": [["ship's hub", 1]],
+
+    "message": [["missive", 1]],
+    "chat": [["parley channel", 1]],
+
+    "photo": [["sketch", 1]],
+    "video": [["moving sketch", 1]],
+
+    "music": [["sea shanty", 1]],
+
+    "password": [["secret code", 1]],
+
+    "error": [["curse upon the code", 1]],
+    "bug": [["gremlin in the hull", 1]],
+
+    "loading": [["preparin' the cannons", 1]],
+    "download": [["haulin' from afar", 1]],
+    "upload": [["sendin' to the skies", 1]],
+
+    "cool": [["slick as the sea breeze", 1]],
+    "awesome": [["glorious as treasure", 1]],
+
+    "weird": [["stranger than the deep", 1]],
+    "crazy": [["mad as a storm", 1]],
+
+    "boring": [["duller than calm seas", 1]],
+
+    "tired": [["spent from the voyage", 1]],
+
+    "sick": [["plagued", 1]],
+
+    "dead": [["sleepin' with the fishes", 1]]
+            
+}
