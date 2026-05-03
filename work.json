@@ -1,4 +1,4 @@
-
+{
             "you": [["ye", 1]],
             "your": [["yer", 1]],
             "yours": [["yers", 1]],
@@ -113,3 +113,4 @@
             "fight": [["duel", 1]],
             "kill": [["end", 1]],
             "danger": [["treacherous waters", 1]]
+}
