@@ -1,0 +1,101 @@
+{
+  "you": [["thou", 0.6], ["thee", 0.4]],
+  "your": [["thy", 0.7], ["thine", 0.3]],
+  "yours": [["thine", 1]],
+  "yourself": [["thyself", 1]],
+
+  "i": [["I", 1]],
+  "me": [["me", 0.5], ["mine own self", 0.5]],
+  "my": [["my", 0.5], ["mine", 0.5]],
+  "mine": [["mine", 1]],
+
+  "we": [["we", 0.6], ["we all", 0.4]],
+  "us": [["us", 1]],
+  "our": [["our", 0.5], ["our noble", 0.5]],
+
+  "are": [["art", 0.6], ["be", 0.4]],
+  "am": [["am", 0.5], ["be", 0.5]],
+  "is": [["is", 0.5], ["be", 0.5]],
+  "was": [["wast", 1]],
+  "were": [["wert", 1]],
+  "have": [["hast", 0.5], ["have", 0.5]],
+  "has": [["hath", 1]],
+  "had": [["hadst", 1]],
+  "do": [["dost", 1]],
+  "does": [["doth", 1]],
+  "did": [["didst", 1]],
+  "will": [["wilt", 1]],
+  "would": [["wouldst", 1]],
+  "shall": [["shalt", 1]],
+  "should": [["shouldst", 1]],
+  "can": [["canst", 1]],
+  "could": [["couldst", 1]],
+
+  "hello": [["greetings", 0.5], ["well met", 0.5]],
+  "hi": [["well met", 1]],
+  "hey": [["ho there", 1]],
+
+  "yes": [["aye", 0.3], ["indeed", 0.4], ["verily", 0.3]],
+  "no": [["nay", 0.7], ["by no means", 0.3]],
+
+  "friend": [["good fellow", 0.5], ["kind sir", 0.5]],
+  "friends": [["companions", 1]],
+  "man": [["gentleman", 0.6], ["sir", 0.4]],
+  "woman": [["lady", 1]],
+
+  "because": [["forsooth", 0.4], ["for that", 0.6]],
+  "why": [["wherefore", 1]],
+  "how": [["how so", 1]],
+  "what": [["what manner of thing", 0.5], ["what", 0.5]],
+
+  "think": [["bethink", 0.5], ["ponder", 0.5]],
+  "know": [["knoweth", 0.5], ["be aware", 0.5]],
+  "see": [["behold", 1]],
+  "look": [["behold", 1]],
+
+  "go": [["depart", 0.5], ["take thy leave", 0.5]],
+  "come": [["approach", 0.5], ["come hither", 0.5]],
+  "wait": [["bide a while", 1]],
+  "stop": [["cease", 1]],
+
+  "say": [["speak", 0.5], ["utter", 0.5]],
+  "tell": [["recount", 1]],
+  "ask": [["inquire", 1]],
+
+  "help": [["aid", 1]],
+  "give": [["bestow", 1]],
+  "take": [["take", 0.5], ["claim", 0.5]],
+  "make": [["forge", 0.5], ["create", 0.5]],
+
+  "good": [["most excellent", 0.5], ["fine", 0.5]],
+  "bad": [["ill", 1]],
+  "great": [["grand", 0.5], ["most noble", 0.5]],
+  "small": [["modest", 1]],
+
+  "very": [["most", 1]],
+  "really": [["truly", 1]],
+
+  "now": [["anon", 0.5], ["at present", 0.5]],
+  "soon": [["anon", 1]],
+  "later": [["in due time", 1]],
+
+  "always": [["ever", 1]],
+  "never": [["ne'er", 1]],
+
+  "here": [["here", 0.5], ["hither", 0.5]],
+  "there": [["thither", 1]],
+
+  "lol": [["ha!", 0.5], ["good mirth!", 0.5]],
+  "lmao": [["I laugh heartily", 1]],
+
+  "wtf": [["what sorcery is this", 1]],
+
+  "cool": [["most admirable", 1]],
+  "awesome": [["truly magnificent", 1]],
+
+  "weird": [["most peculiar", 1]],
+  "crazy": [["mad indeed", 1]],
+
+  "tired": [["weary", 1]],
+  "dead": [["gone to their rest", 1]]
+}
