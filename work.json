@@ -1,4 +1,4 @@
-            // ===== pronouns =====
+
             "you": [["ye", 1]],
             "your": [["yer", 1]],
             "yours": [["yers", 1]],
@@ -7,7 +7,7 @@
             "im": [["me", 1]],
             "me": [["meself", 1]],
 
-            // ===== verbs(???) =====
+
             "are": [["be", 1]],
             "am": [["be", 1]],
             "is": [["be", 1]],
@@ -19,13 +19,13 @@
             "because": [["cause", 0.5], ["cuz'", 0.5]],
            "the": [["ze", 0.3], ["th", 0.3], ["da", 0.4]],
 
-            // ===== actionings =====
+
             "go": [["set sail", 1]],
             "went": [["sailed", 1]],
             "come": [["come aboard", 1]],
             "came": [["came aboard", 1]],
 
-            // ===== ppeopel =====
+
             "friend": [["matey", 1]],
             "twin": [["matey", 1]],
             "friends": [["crew", 1]],
@@ -38,13 +38,13 @@
             "loser": [["plank walker", 1]],
             "bullshit": [["tomfoolery", 1]],
 
-            // ===== greetings =====
+
             "hello": [["ahoy", 0.5], ["ahoy there", 0.3], ["greetings, landlubber", 0.2]],
             "hi": [["ahoy", 0.5], ["yo-ho-ho", 0.3], ["ahoy there", 0.2]],
             "hey": [["ahoy there", 0.6], ["ahoy", 0.4]],
             "yo": [["yo-ho-ho", 0.7], ["ahoy", 0.3]],
 
-            // ===== yes nos =====
+
             "yes": [["aye", 0.6], ["aye aye", 0.3], ["indeed", 0.1]],
             "yeah": [["aye", 0.5], ["aye aye", 0.5]],
             "ok": [["aye aye", 0.7], ["aye", 0.3]],
@@ -52,12 +52,12 @@
             "no": [["nay", 0.3], ["never!", 0.3], ["nuh uh", 0.4]],
             "nope": [["nay", 0.5], ["nuh uh!", 0.5]],
 
-            // ===== emotions =====
+
             "happy": [["jolly", 0.5], ["jumpin' w' joy!", 0.5]],
             "sad": [["down in th' bilge", 1]],
             "scared": [["shiverin' me timbers", 1]],
 
-            // ===== objects =====
+
             "money": [["booty", 1]],
             "coins": [["dabloons", 1]],
             "food": [["grub", 1]],
@@ -65,15 +65,15 @@
             "beer": [["grog", 1]],
             "rum": [["rum (aye, the good stuff)", 1]],
 
-            // ===== locations =====
+
             "home": [["quarters", 1]],
             "house": [["ship", 1]],
 
-            // ===== devices =====
+
             "phone": [["parrot communicator", 1]],
             "computer": [["magic thinkin' box", 1]],
 
-            // ===== actions =====
+
             "stop": [["avast", 1]],
             "wait": [["belay that", 1]],
             "look": [["spy", 1]],
@@ -82,34 +82,34 @@
             "know": [["be knowin'", 1]],
             "ragebait": [["baitin' a quarrel", 1]],
 
-            // ===== insults =====
+
             "idiot": [["bilge rat", 1]],
             "stupid": [["addled-brained", 1]],
             "larp": [["playin' at pirate, no true buccaneer", 1]],
             "slimed": [["foul treachery", 1]],
            "sybau": [["hold yer tongue, ye scallywag", 1]],
 
-            // ===== haha's =====
+
             "lol": [["yo-ho-ho", 0.5], ["har har", 0.5]],
             "lmao": [["yo-ho-ho", 0.5], ["that be rich", 0.5]],
             "wtf": [["what in the seven seas?!", 1]],
             "what the fuck": [["what in the seven seas?!", 1]],
 
-            // ===== idk how to group thsi =====
+
             "fire": [["blazin' like a broadside", 1]],
             "lit": [["burnin' bright as a beacon", 1]],
             "goat": [["legend o' the seas", 1]],
             "sus": [["fishy as rotten cod", 1]],
             "bitch": [["worm", 1]],
 
-            // ===== "im" =====
+
             "im cooked": [["i be utterly shipwrecked", 1]],
             "im fried": [["i be utterly shipwrecked", 1]],
             "lets go": [["hoist the sails!", 1]],
             "no way": [["by the kraken!", 1]],
             "what": [["what sorcery be this", 1]],
 
-            // ===== ashdwqkesahnedkwqrnjqejqejtqehtfjqwtjqet =====
+
             "fight": [["duel", 1]],
             "kill": [["end", 1]],
             "danger": [["treacherous waters", 1]]
