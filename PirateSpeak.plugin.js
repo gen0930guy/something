@@ -1,7 +1,10 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.0
+ * @version 1.0.1
+ * @description Message TRANSFORMER NOW!!!! RAHHH
+ * @source https://github.com/gen0930guy/something
+ * @updateUrl https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js
  */
 
 module.exports = class PirateSpeak {
@@ -12,34 +15,65 @@ module.exports = class PirateSpeak {
             pirate: null,
             british: null
         };
+
+        this.observer = null;
     }
 
     async start() {
         await this.loadAllReplacements();
-        this.interval = setInterval(() => this.inject(), 1000);
+
+        this.inject();
+
+        this.observer = new MutationObserver(() => {
+            this.inject();
+        });
+
+        this.observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        console.log("[msg algorithm] started");
     }
 
     stop() {
-        clearInterval(this.interval);
+        this.observer?.disconnect();
+
         document.getElementById("pirate-btn")?.remove();
         document.getElementById("pirate-menu")?.remove();
+
+        console.log("[msg algorithm] stopped");
     }
 
     async loadAllReplacements() {
         await Promise.all([
-            this.loadReplacements("pirate", "https://raw.githubusercontent.com/gen0930guy/something/refs/heads/main/updatedlist.json"),
-            this.loadReplacements("british", "https://raw.githubusercontent.com/gen0930guy/something/refs/heads/main/britishworking.json")
+            this.loadReplacements(
+                "pirate",
+                "https://raw.githubusercontent.com/gen0930guy/something/main/updatedlist.json"
+            ),
+            this.loadReplacements(
+                "british",
+                "https://raw.githubusercontent.com/gen0930guy/something/main/britishworking.json"
+            )
         ]);
     }
 
     async loadReplacements(mode, url) {
         try {
             const res = await fetch(url);
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}`);
+            }
+
             const json = await res.json();
+
             this.replacementsMap[mode] = json;
-            console.log(`${mode} replacements loaded`);
+
+            console.log(`[msg algorithm] ${mode} replacements loaded`);
         } catch (err) {
-            console.error(`Failed to load ${mode}:`, err);
+            console.error(`[msg algorithm] Failed to load ${mode}:`, err);
+
             this.replacementsMap[mode] = {};
         }
     }
@@ -57,13 +91,19 @@ module.exports = class PirateSpeak {
         if (!buttonRow) return;
 
         const button = document.createElement("button");
+
         button.id = "pirate-btn";
+        button.type = "button";
 
         const img = document.createElement("img");
+
         img.src = "https://i.imgur.com/f5S4Z3F.png";
-        img.style.width = "20px";
-        img.style.height = "25px";
-        img.style.pointerEvents = "none";
+
+        Object.assign(img.style, {
+            width: "20px",
+            height: "25px",
+            pointerEvents: "none"
+        });
 
         button.appendChild(img);
 
@@ -73,19 +113,27 @@ module.exports = class PirateSpeak {
             cursor: "pointer",
             fontSize: "18px",
             marginLeft: "6px",
-            opacity: "0.8"
+            opacity: "0.8",
+            padding: "0"
         });
 
-        button.onmouseenter = () => button.style.opacity = "1";
-        button.onmouseleave = () => button.style.opacity = "0.8";
+        button.onmouseenter = () => {
+            button.style.opacity = "1";
+        };
+
+        button.onmouseleave = () => {
+            button.style.opacity = "0.8";
+        };
 
         button.onclick = (e) => {
             e.preventDefault();
+
             this.runMode();
         };
 
         button.oncontextmenu = (e) => {
             e.preventDefault();
+
             this.openMenu(e.clientX, e.clientY);
         };
 
@@ -95,13 +143,15 @@ module.exports = class PirateSpeak {
     runMode() {
         if (this.mode === "placeholder") {
             this.placeholderify();
+
             return;
         }
 
         const replacements = this.replacementsMap[this.mode];
 
         if (!replacements) {
-            console.warn(`${this.mode} replacements not loaded yet`);
+            console.warn(`[msg algorithm] ${this.mode} replacements not loaded yet`);
+
             return;
         }
 
@@ -110,28 +160,39 @@ module.exports = class PirateSpeak {
 
     transform(replacements) {
         const textbox = document.querySelector("div[role='textbox']");
+
         if (!textbox) return;
 
         let text = textbox.innerText;
 
-        let transformed = text.split(/\b/).map(word => {
-            const lower = word.toLowerCase();
-            const options = replacements[lower];
+        let transformed = text
+            .split(/\b/)
+            .map(word => {
+                const lower = word.toLowerCase();
 
-            if (!options) return word;
+                const options = replacements[lower];
 
-            const totalWeight = options.reduce((sum, [, weight]) => sum + weight, 0);
-            let rand = Math.random() * totalWeight;
+                if (!options) return word;
 
-            for (const [replacement, weight] of options) {
-                rand -= weight;
-                if (rand <= 0) return replacement;
-            }
+                const totalWeight = options.reduce(
+                    (sum, [, weight]) => sum + weight,
+                    0
+                );
 
-            return options[0][0];
-        }).join("");
+                let rand = Math.random() * totalWeight;
 
-        // mode-specific flair
+                for (const [replacement, weight] of options) {
+                    rand -= weight;
+
+                    if (rand <= 0) {
+                        return replacement;
+                    }
+                }
+
+                return options[0][0];
+            })
+            .join("");
+
         if (this.mode === "pirate") {
             transformed += " 🏴‍☠️";
         }
@@ -144,7 +205,10 @@ module.exports = class PirateSpeak {
                 ", if it please thee.",
                 "."
             ];
-            transformed += endings[Math.floor(Math.random() * endings.length)];
+
+            transformed += endings[
+                Math.floor(Math.random() * endings.length)
+            ];
         }
 
         this.replaceTextboxText(textbox, transformed);
@@ -152,6 +216,7 @@ module.exports = class PirateSpeak {
 
     placeholderify() {
         const textbox = document.querySelector("div[role='textbox']");
+
         if (!textbox) return;
 
         let text = textbox.innerText;
@@ -165,16 +230,31 @@ module.exports = class PirateSpeak {
             .replace(/no/g, "nyo")
             .replace(/nu/g, "nyu");
 
-        transformed = transformed.split(/\b/).map(word => {
-            if (/^[a-zA-Z]/.test(word) && Math.random() < 0.25) {
-                return word[0] + "-" + word;
-            }
-            return word;
-        }).join("");
+        transformed = transformed
+            .split(/\b/)
+            .map(word => {
+                if (
+                    /^[a-zA-Z]/.test(word) &&
+                    Math.random() < 0.25
+                ) {
+                    return word[0] + "-" + word;
+                }
 
-        const faces = [" uwu", " owo", " >w<", " ^w^"];
+                return word;
+            })
+            .join("");
+
+        const faces = [
+            " uwu",
+            " owo",
+            " >w<",
+            " ^w^"
+        ];
+
         if (Math.random() < 0.8) {
-            transformed += faces[Math.floor(Math.random() * faces.length)];
+            transformed += faces[
+                Math.floor(Math.random() * faces.length)
+            ];
         }
 
         this.replaceTextboxText(textbox, transformed);
@@ -186,6 +266,7 @@ module.exports = class PirateSpeak {
         document.execCommand("selectAll", false, null);
 
         const data = new DataTransfer();
+
         data.setData("text/plain", newText);
 
         const pasteEvent = new ClipboardEvent("paste", {
@@ -200,6 +281,7 @@ module.exports = class PirateSpeak {
         document.getElementById("pirate-menu")?.remove();
 
         const menu = document.createElement("div");
+
         menu.id = "pirate-menu";
 
         Object.assign(menu.style, {
@@ -210,13 +292,14 @@ module.exports = class PirateSpeak {
             background: "#2b2d31",
             borderRadius: "8px",
             boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
-            zIndex: "9999",
+            zIndex: "999999",
             fontFamily: "sans-serif",
             overflow: "hidden",
             border: "1px solid #1e1f22"
         });
 
         const header = document.createElement("div");
+
         Object.assign(header.style, {
             display: "flex",
             justifyContent: "space-between",
@@ -231,6 +314,7 @@ module.exports = class PirateSpeak {
         header.innerText = "mode select";
 
         const closeBtn = document.createElement("div");
+
         closeBtn.innerText = "✕";
 
         Object.assign(closeBtn.style, {
@@ -239,18 +323,29 @@ module.exports = class PirateSpeak {
             fontSize: "14px"
         });
 
-        closeBtn.onmouseenter = () => closeBtn.style.color = "#fff";
-        closeBtn.onmouseleave = () => closeBtn.style.color = "#b5bac1";
-        closeBtn.onclick = () => menu.remove();
+        closeBtn.onmouseenter = () => {
+            closeBtn.style.color = "#fff";
+        };
+
+        closeBtn.onmouseleave = () => {
+            closeBtn.style.color = "#b5bac1";
+        };
+
+        closeBtn.onclick = () => {
+            menu.remove();
+        };
 
         header.appendChild(closeBtn);
+
         menu.appendChild(header);
 
         const optionsContainer = document.createElement("div");
+
         optionsContainer.style.padding = "6px";
 
         const makeOption = (label, mode) => {
             const option = document.createElement("div");
+
             option.innerText = label;
 
             Object.assign(option.style, {
@@ -260,38 +355,60 @@ module.exports = class PirateSpeak {
                 color: "#dbdee1",
                 fontSize: "14px",
                 marginBottom: "2px",
-                background: this.mode === mode ? "#404249" : "transparent"
+                background:
+                    this.mode === mode
+                        ? "#404249"
+                        : "transparent"
             });
 
             option.onmouseenter = () => {
-                if (this.mode !== mode) option.style.background = "#35373c";
+                if (this.mode !== mode) {
+                    option.style.background = "#35373c";
+                }
             };
 
             option.onmouseleave = () => {
-                option.style.background = this.mode === mode ? "#404249" : "transparent";
+                option.style.background =
+                    this.mode === mode
+                        ? "#404249"
+                        : "transparent";
             };
 
             option.onclick = () => {
                 this.mode = mode;
+
                 menu.remove();
             };
 
             return option;
         };
 
-        optionsContainer.appendChild(makeOption("🍺 Pirate-ifier", "pirate"));
-        optionsContainer.appendChild(makeOption("🐾 Uwu-ifier", "placeholder"));
-        optionsContainer.appendChild(makeOption("☕ British-ifier", "british"));
+        optionsContainer.appendChild(
+            makeOption("🍺 Pirate-ifier", "pirate")
+        );
+
+        optionsContainer.appendChild(
+            makeOption("🐾 Uwu-ifier", "placeholder")
+        );
+
+        optionsContainer.appendChild(
+            makeOption("☕ British-ifier", "british")
+        );
 
         menu.appendChild(optionsContainer);
+
         document.body.appendChild(menu);
 
         setTimeout(() => {
-            document.addEventListener("click", (e) => {
-                if (!menu.contains(e.target)) {
-                    menu.remove();
-                }
-            }, { once: true });
+            document.addEventListener(
+                "click",
+                (e) => {
+                    if (!menu.contains(e.target)) {
+                        menu.remove();
+                    }
+                },
+                { once: true }
+            );
         }, 0);
     }
 };
