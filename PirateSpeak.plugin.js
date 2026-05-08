@@ -1,8 +1,8 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.2
- * @description messag 😁
+ * @version 1.0.4
+ * @description pirate / british / uwu message transformer
  * @source https://github.com/gen0930guy/something
  * @updateUrl https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js
  */
@@ -10,9 +10,10 @@
 module.exports = class PirateSpeak {
 
     constructor() {
+
         this.mode = "pirate";
 
-        this.currentVersion = "1.0.2";
+        this.currentVersion = "1.0.4;
 
         this.replacementsMap = {
             pirate: null,
@@ -20,11 +21,20 @@ module.exports = class PirateSpeak {
         };
 
         this.observer = null;
+
+        this.updateInterval = null;
+
+        this.updateShown = false;
     }
 
     async start() {
 
         await this.checkForUpdates();
+
+        this.updateInterval = setInterval(
+            () => this.checkForUpdates(),
+            180000
+        );
 
         await this.loadAllReplacements();
 
@@ -46,7 +56,10 @@ module.exports = class PirateSpeak {
 
         this.observer?.disconnect();
 
+        clearInterval(this.updateInterval);
+
         document.getElementById("pirate-btn")?.remove();
+
         document.getElementById("pirate-menu")?.remove();
 
         console.log("[msg algorithm] stopped");
@@ -60,8 +73,15 @@ module.exports = class PirateSpeak {
                 "https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js";
 
             const res = await fetch(
-                url + "?cache=" + Date.now()
+                url + "?cache=" + Date.now(),
+                {
+                    cache: "no-store"
+                }
             );
+
+            if (!res.ok) {
+                return;
+            }
 
             const text = await res.text();
 
@@ -69,18 +89,28 @@ module.exports = class PirateSpeak {
                 /@version\s+([0-9.]+)/
             );
 
-            if (!match) return;
+            if (!match) {
+                return;
+            }
 
             const remoteVersion = match[1];
 
-            if (remoteVersion !== this.currentVersion) {
+            if (
+                remoteVersion !== this.currentVersion &&
+                !this.updateShown
+            ) {
 
-                BdApi.showConfirmationModal(
+                this.updateShown = true;
+
+                BdApi.UI.showConfirmationModal(
                     "msg algorithm update available",
-                    `Version ${remoteVersion} is available on GitHub.`,
+
+                    `Version ${remoteVersion} is available.`,
+
                     {
                         confirmText: "Open Download",
-                        cancelText: "Later",
+
+                        cancelText: "Ignore",
 
                         onConfirm: () => {
                             window.open(url);
@@ -89,7 +119,7 @@ module.exports = class PirateSpeak {
                 );
 
                 console.log(
-                    `[msg algorithm] update available: ${remoteVersion}`
+                    `[msg algorithm] update found: ${remoteVersion}`
                 );
             }
 
@@ -105,6 +135,7 @@ module.exports = class PirateSpeak {
     async loadAllReplacements() {
 
         await Promise.all([
+
             this.loadReplacements(
                 "pirate",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/updatedlist.json"
@@ -114,6 +145,7 @@ module.exports = class PirateSpeak {
                 "british",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/britishworking.json"
             )
+
         ]);
     }
 
@@ -171,6 +203,7 @@ module.exports = class PirateSpeak {
         const button = document.createElement("button");
 
         button.id = "pirate-btn";
+
         button.type = "button";
 
         const img = document.createElement("img");
@@ -355,6 +388,7 @@ module.exports = class PirateSpeak {
                     /^[a-zA-Z]/.test(word) &&
                     Math.random() < 0.25
                 ) {
+
                     return (
                         word[0] +
                         "-" +
