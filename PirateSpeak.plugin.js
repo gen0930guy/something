@@ -1,7 +1,7 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.1
+ * @version 1.0.2
  * @description burp
  */
 
@@ -178,6 +178,15 @@ module.exports = class PirateSpeak {
                 "."
             ];
 
+                    if (this.mode === "placeholder") {
+            const endings = [
+                " UwU",
+                " OwO",
+                " ^_^",
+                ", nyaa~",
+                ", hehe~"
+            ];
+
             transformed += endings[Math.floor(Math.random() * endings.length)];
         }
 
@@ -251,7 +260,7 @@ module.exports = class PirateSpeak {
 
         const container = document.createElement("div");
         container.appendChild(makeOption("🦜 Pirate", "pirate"));
-        container.appendChild(makeOption("🐈 Uwu", "placeholder"));
+        container.appendChild(makeOption("🐈 Uwu~", "placeholder"));
         container.appendChild(makeOption("☕ British", "british"));
 
         menu.appendChild(container);
