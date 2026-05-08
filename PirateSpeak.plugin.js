@@ -167,31 +167,35 @@ module.exports = class PirateSpeak {
             })
             .join("");
 
-        if (this.mode === "pirate") transformed += " 🏴‍☠️";
+let endings = [];
 
-        if (this.mode === "british") {
-            const endings = [
-                ", good sir.",
-                ", my liege.",
-                ", I daresay.",
-                ", if it please thee.",
-                "."
-            ];
+if (this.mode === "pirate") {
+    transformed += " 🏴‍☠️";
+}
 
-                    if (this.mode === "placeholder") {
-            const endings = [
-                " UwU",
-                " OwO",
-                " ^_^",
-                ", nyaa~",
-                ", hehe~"
-            ];
+if (this.mode === "british") {
+    endings = [
+        ", good sir.",
+        ", my liege.",
+        ", I daresay.",
+        ", if it please thee.",
+        "."
+    ];
+}
 
-            transformed += endings[Math.floor(Math.random() * endings.length)];
-        }
+if (this.mode === "placeholder") {
+    endings = [
+        " UwU",
+        " OwO",
+        " ^_^",
+        ", nyaa~",
+        ", hehe~"
+    ];
+}
 
-        this.replaceTextboxText(textbox, transformed);
-    }
+if (endings.length) {
+    transformed += endings[Math.floor(Math.random() * endings.length)];
+}
 
     replaceTextboxText(textbox, newText) {
         textbox.focus();
