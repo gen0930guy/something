@@ -2,14 +2,17 @@
  * @name msg algorithm
  * @author gen0930
  * @version 1.0.2
- * @description Message TRANSFORMER NOW!!!! RAHHH
+ * @description messag 😁
  * @source https://github.com/gen0930guy/something
  * @updateUrl https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js
  */
 
 module.exports = class PirateSpeak {
+
     constructor() {
         this.mode = "pirate";
+
+        this.currentVersion = "1.0.2";
 
         this.replacementsMap = {
             pirate: null,
@@ -20,6 +23,9 @@ module.exports = class PirateSpeak {
     }
 
     async start() {
+
+        await this.checkForUpdates();
+
         await this.loadAllReplacements();
 
         this.inject();
@@ -37,6 +43,7 @@ module.exports = class PirateSpeak {
     }
 
     stop() {
+
         this.observer?.disconnect();
 
         document.getElementById("pirate-btn")?.remove();
@@ -45,12 +52,64 @@ module.exports = class PirateSpeak {
         console.log("[msg algorithm] stopped");
     }
 
+    async checkForUpdates() {
+
+        try {
+
+            const url =
+                "https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js";
+
+            const res = await fetch(
+                url + "?cache=" + Date.now()
+            );
+
+            const text = await res.text();
+
+            const match = text.match(
+                /@version\s+([0-9.]+)/
+            );
+
+            if (!match) return;
+
+            const remoteVersion = match[1];
+
+            if (remoteVersion !== this.currentVersion) {
+
+                BdApi.showConfirmationModal(
+                    "msg algorithm update available",
+                    `Version ${remoteVersion} is available on GitHub.`,
+                    {
+                        confirmText: "Open Download",
+                        cancelText: "Later",
+
+                        onConfirm: () => {
+                            window.open(url);
+                        }
+                    }
+                );
+
+                console.log(
+                    `[msg algorithm] update available: ${remoteVersion}`
+                );
+            }
+
+        } catch (err) {
+
+            console.error(
+                "[msg algorithm] update check failed",
+                err
+            );
+        }
+    }
+
     async loadAllReplacements() {
+
         await Promise.all([
             this.loadReplacements(
                 "pirate",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/updatedlist.json"
             ),
+
             this.loadReplacements(
                 "british",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/britishworking.json"
@@ -59,7 +118,9 @@ module.exports = class PirateSpeak {
     }
 
     async loadReplacements(mode, url) {
+
         try {
+
             const res = await fetch(url);
 
             if (!res.ok) {
@@ -70,24 +131,41 @@ module.exports = class PirateSpeak {
 
             this.replacementsMap[mode] = json;
 
-            console.log(`[msg algorithm] ${mode} replacements loaded`);
+            console.log(
+                `[msg algorithm] ${mode} replacements loaded`
+            );
+
         } catch (err) {
-            console.error(`[msg algorithm] Failed to load ${mode}:`, err);
+
+            console.error(
+                `[msg algorithm] Failed to load ${mode}:`,
+                err
+            );
 
             this.replacementsMap[mode] = {};
         }
     }
 
     inject() {
-        if (document.getElementById("pirate-btn")) return;
 
-        const textbox = document.querySelector("div[role='textbox']");
+        if (document.getElementById("pirate-btn")) {
+            return;
+        }
+
+        const textbox = document.querySelector(
+            "div[role='textbox']"
+        );
+
         if (!textbox) return;
 
         const form = textbox.closest("form");
+
         if (!form) return;
 
-        const buttonRow = form.querySelector("div[class*='buttons']");
+        const buttonRow = form.querySelector(
+            "div[class*='buttons']"
+        );
+
         if (!buttonRow) return;
 
         const button = document.createElement("button");
@@ -97,7 +175,8 @@ module.exports = class PirateSpeak {
 
         const img = document.createElement("img");
 
-        img.src = "https://i.imgur.com/f5S4Z3F.png";
+        img.src =
+            "https://i.imgur.com/f5S4Z3F.png";
 
         Object.assign(img.style, {
             width: "20px",
@@ -126,31 +205,42 @@ module.exports = class PirateSpeak {
         };
 
         button.onclick = (e) => {
+
             e.preventDefault();
 
             this.runMode();
         };
 
         button.oncontextmenu = (e) => {
+
             e.preventDefault();
 
-            this.openMenu(e.clientX, e.clientY);
+            this.openMenu(
+                e.clientX,
+                e.clientY
+            );
         };
 
         buttonRow.appendChild(button);
     }
 
     runMode() {
+
         if (this.mode === "placeholder") {
+
             this.placeholderify();
 
             return;
         }
 
-        const replacements = this.replacementsMap[this.mode];
+        const replacements =
+            this.replacementsMap[this.mode];
 
         if (!replacements) {
-            console.warn(`[msg algorithm] ${this.mode} replacements not loaded yet`);
+
+            console.warn(
+                `[msg algorithm] ${this.mode} replacements not loaded yet`
+            );
 
             return;
         }
@@ -159,7 +249,10 @@ module.exports = class PirateSpeak {
     }
 
     transform(replacements) {
-        const textbox = document.querySelector("div[role='textbox']");
+
+        const textbox = document.querySelector(
+            "div[role='textbox']"
+        );
 
         if (!textbox) return;
 
@@ -168,20 +261,33 @@ module.exports = class PirateSpeak {
         let transformed = text
             .split(/\b/)
             .map(word => {
-                const lower = word.toLowerCase();
 
-                const options = replacements[lower];
+                const lower =
+                    word.toLowerCase();
 
-                if (!options) return word;
+                const options =
+                    replacements[lower];
 
-                const totalWeight = options.reduce(
-                    (sum, [, weight]) => sum + weight,
-                    0
-                );
+                if (!options) {
+                    return word;
+                }
 
-                let rand = Math.random() * totalWeight;
+                const totalWeight =
+                    options.reduce(
+                        (sum, [, weight]) =>
+                            sum + weight,
+                        0
+                    );
 
-                for (const [replacement, weight] of options) {
+                let rand =
+                    Math.random() *
+                    totalWeight;
+
+                for (const [
+                    replacement,
+                    weight
+                ] of options) {
+
                     rand -= weight;
 
                     if (rand <= 0) {
@@ -194,10 +300,12 @@ module.exports = class PirateSpeak {
             .join("");
 
         if (this.mode === "pirate") {
+
             transformed += " 🏴‍☠️";
         }
 
         if (this.mode === "british") {
+
             const endings = [
                 ", good sir.",
                 ", my liege.",
@@ -207,15 +315,24 @@ module.exports = class PirateSpeak {
             ];
 
             transformed += endings[
-                Math.floor(Math.random() * endings.length)
+                Math.floor(
+                    Math.random() *
+                    endings.length
+                )
             ];
         }
 
-        this.replaceTextboxText(textbox, transformed);
+        this.replaceTextboxText(
+            textbox,
+            transformed
+        );
     }
 
     placeholderify() {
-        const textbox = document.querySelector("div[role='textbox']");
+
+        const textbox = document.querySelector(
+            "div[role='textbox']"
+        );
 
         if (!textbox) return;
 
@@ -233,11 +350,16 @@ module.exports = class PirateSpeak {
         transformed = transformed
             .split(/\b/)
             .map(word => {
+
                 if (
                     /^[a-zA-Z]/.test(word) &&
                     Math.random() < 0.25
                 ) {
-                    return word[0] + "-" + word;
+                    return (
+                        word[0] +
+                        "-" +
+                        word
+                    );
                 }
 
                 return word;
@@ -248,62 +370,95 @@ module.exports = class PirateSpeak {
             " uwu",
             " owo",
             " >w<",
-            " ^w^",
-            ", nya~"
+            " ^w^"
         ];
 
         if (Math.random() < 0.8) {
+
             transformed += faces[
-                Math.floor(Math.random() * faces.length)
+                Math.floor(
+                    Math.random() *
+                    faces.length
+                )
             ];
         }
 
-        this.replaceTextboxText(textbox, transformed);
+        this.replaceTextboxText(
+            textbox,
+            transformed
+        );
     }
 
-    replaceTextboxText(textbox, newText) {
+    replaceTextboxText(
+        textbox,
+        newText
+    ) {
+
         textbox.focus();
 
-        document.execCommand("selectAll", false, null);
+        document.execCommand(
+            "selectAll",
+            false,
+            null
+        );
 
-        const data = new DataTransfer();
+        const data =
+            new DataTransfer();
 
-        data.setData("text/plain", newText);
+        data.setData(
+            "text/plain",
+            newText
+        );
 
-        const pasteEvent = new ClipboardEvent("paste", {
-            clipboardData: data,
-            bubbles: true
-        });
+        const pasteEvent =
+            new ClipboardEvent(
+                "paste",
+                {
+                    clipboardData: data,
+                    bubbles: true
+                }
+            );
 
-        textbox.dispatchEvent(pasteEvent);
+        textbox.dispatchEvent(
+            pasteEvent
+        );
     }
 
     openMenu(x, y) {
-        document.getElementById("pirate-menu")?.remove();
 
-        const menu = document.createElement("div");
+        document.getElementById(
+            "pirate-menu"
+        )?.remove();
+
+        const menu =
+            document.createElement("div");
 
         menu.id = "pirate-menu";
 
         Object.assign(menu.style, {
             position: "fixed",
-            bottom: `${window.innerHeight - y}px`,
+            bottom:
+                `${window.innerHeight - y}px`,
             left: `${x}px`,
             width: "220px",
             background: "#2b2d31",
             borderRadius: "8px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+            boxShadow:
+                "0 8px 24px rgba(0,0,0,0.5)",
             zIndex: "999999",
             fontFamily: "sans-serif",
             overflow: "hidden",
-            border: "1px solid #1e1f22"
+            border:
+                "1px solid #1e1f22"
         });
 
-        const header = document.createElement("div");
+        const header =
+            document.createElement("div");
 
         Object.assign(header.style, {
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent:
+                "space-between",
             alignItems: "center",
             padding: "10px",
             background: "#232428",
@@ -312,9 +467,11 @@ module.exports = class PirateSpeak {
             color: "#fff"
         });
 
-        header.innerText = "mode select";
+        header.innerText =
+            "mode select";
 
-        const closeBtn = document.createElement("div");
+        const closeBtn =
+            document.createElement("div");
 
         closeBtn.innerText = "✕";
 
@@ -324,13 +481,17 @@ module.exports = class PirateSpeak {
             fontSize: "14px"
         });
 
-        closeBtn.onmouseenter = () => {
-            closeBtn.style.color = "#fff";
-        };
+        closeBtn.onmouseenter =
+            () => {
+                closeBtn.style.color =
+                    "#fff";
+            };
 
-        closeBtn.onmouseleave = () => {
-            closeBtn.style.color = "#b5bac1";
-        };
+        closeBtn.onmouseleave =
+            () => {
+                closeBtn.style.color =
+                    "#b5bac1";
+            };
 
         closeBtn.onclick = () => {
             menu.remove();
@@ -340,12 +501,21 @@ module.exports = class PirateSpeak {
 
         menu.appendChild(header);
 
-        const optionsContainer = document.createElement("div");
+        const optionsContainer =
+            document.createElement("div");
 
-        optionsContainer.style.padding = "6px";
+        optionsContainer.style.padding =
+            "6px";
 
-        const makeOption = (label, mode) => {
-            const option = document.createElement("div");
+        const makeOption = (
+            label,
+            mode
+        ) => {
+
+            const option =
+                document.createElement(
+                    "div"
+                );
 
             option.innerText = label;
 
@@ -362,20 +532,28 @@ module.exports = class PirateSpeak {
                         : "transparent"
             });
 
-            option.onmouseenter = () => {
-                if (this.mode !== mode) {
-                    option.style.background = "#35373c";
-                }
-            };
+            option.onmouseenter =
+                () => {
 
-            option.onmouseleave = () => {
-                option.style.background =
-                    this.mode === mode
-                        ? "#404249"
-                        : "transparent";
-            };
+                    if (
+                        this.mode !== mode
+                    ) {
+                        option.style.background =
+                            "#35373c";
+                    }
+                };
+
+            option.onmouseleave =
+                () => {
+
+                    option.style.background =
+                        this.mode === mode
+                            ? "#404249"
+                            : "transparent";
+                };
 
             option.onclick = () => {
+
                 this.mode = mode;
 
                 menu.remove();
@@ -385,31 +563,51 @@ module.exports = class PirateSpeak {
         };
 
         optionsContainer.appendChild(
-            makeOption("🍺 Pirate-ifier", "pirate")
+            makeOption(
+                "🍺 Pirate-ifier",
+                "pirate"
+            )
         );
 
         optionsContainer.appendChild(
-            makeOption("🐾 Uwu-ifier", "placeholder")
+            makeOption(
+                "🐾 Uwu-ifier",
+                "placeholder"
+            )
         );
 
         optionsContainer.appendChild(
-            makeOption("☕ British-ifier", "british")
+            makeOption(
+                "☕ British-ifier",
+                "british"
+            )
         );
 
-        menu.appendChild(optionsContainer);
+        menu.appendChild(
+            optionsContainer
+        );
 
-        document.body.appendChild(menu);
+        document.body.appendChild(
+            menu
+        );
 
         setTimeout(() => {
+
             document.addEventListener(
                 "click",
                 (e) => {
-                    if (!menu.contains(e.target)) {
+
+                    if (
+                        !menu.contains(
+                            e.target
+                        )
+                    ) {
                         menu.remove();
                     }
                 },
                 { once: true }
             );
+
         }, 0);
     }
 };
