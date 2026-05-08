@@ -2,7 +2,7 @@
  * @name msg algorithm
  * @author gen0930
  * @version 1.0.1
- * @description pirate / british / uwu message transformer (remote)
+ * @description burp
  */
 
 module.exports = class PirateSpeak {
@@ -250,9 +250,9 @@ module.exports = class PirateSpeak {
         };
 
         const container = document.createElement("div");
-        container.appendChild(makeOption("Pirate", "pirate"));
-        container.appendChild(makeOption("Uwu", "placeholder"));
-        container.appendChild(makeOption("British", "british"));
+        container.appendChild(makeOption("🦜 Pirate", "pirate"));
+        container.appendChild(makeOption("🐈 Uwu", "placeholder"));
+        container.appendChild(makeOption("☕ British", "british"));
 
         menu.appendChild(container);
 
