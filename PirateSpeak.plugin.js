@@ -1,8 +1,8 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.0
- * @description pirate / british / uwu message transformer (remote version)
+ * @version 1.0.1
+ * @description pirate / british / uwu message transformer (remote)
  */
 
 module.exports = class PirateSpeak {
@@ -16,11 +16,18 @@ module.exports = class PirateSpeak {
         };
 
         this.observer = null;
+        this._interval = null;
     }
 
     async start() {
+        console.log("[remote plugin] start() called");
+
         await this.loadAllReplacements();
-        this.inject();
+
+        // wait for Discord UI safely
+        this._interval = setInterval(() => {
+            this.inject();
+        }, 1500);
 
         this.observer = new MutationObserver(() => {
             this.inject();
@@ -31,16 +38,17 @@ module.exports = class PirateSpeak {
             subtree: true
         });
 
-        console.log("[msg algorithm remote] started");
+        console.log("[remote plugin] started");
     }
 
     stop() {
+        console.log("[remote plugin] stop() called");
+
         this.observer?.disconnect();
+        clearInterval(this._interval);
 
         document.getElementById("pirate-btn")?.remove();
         document.getElementById("pirate-menu")?.remove();
-
-        console.log("[msg algorithm remote] stopped");
     }
 
     async loadAllReplacements() {
@@ -64,9 +72,9 @@ module.exports = class PirateSpeak {
 
             this.replacementsMap[mode] = await res.json();
 
-            console.log(`[msg algorithm remote] ${mode} loaded`);
+            console.log(`[remote plugin] loaded ${mode}`);
         } catch (err) {
-            console.error(`[msg algorithm remote] failed ${mode}`, err);
+            console.error(`[remote plugin] failed ${mode}`, err);
             this.replacementsMap[mode] = {};
         }
     }
@@ -103,11 +111,13 @@ module.exports = class PirateSpeak {
             background: "transparent",
             border: "none",
             cursor: "pointer",
-            fontSize: "18px",
             marginLeft: "6px",
             opacity: "0.8",
             padding: "0"
         });
+
+        button.onmouseenter = () => button.style.opacity = "1";
+        button.onmouseleave = () => button.style.opacity = "0.8";
 
         button.onclick = (e) => {
             e.preventDefault();
@@ -209,7 +219,6 @@ module.exports = class PirateSpeak {
         });
 
         const header = document.createElement("div");
-
         header.innerText = "mode select";
 
         Object.assign(header.style, {
