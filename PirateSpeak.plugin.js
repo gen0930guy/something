@@ -1,19 +1,14 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.4
- * @description pirate / british / uwu message transformer
- * @source https://github.com/gen0930guy/something
- * @updateUrl https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js
+ * @version 1.0.0
+ * @description pirate / british / uwu message transformer (remote version)
  */
 
 module.exports = class PirateSpeak {
 
     constructor() {
-
         this.mode = "pirate";
-
-        this.currentVersion = "1.0.4;
 
         this.replacementsMap = {
             pirate: null,
@@ -21,23 +16,10 @@ module.exports = class PirateSpeak {
         };
 
         this.observer = null;
-
-        this.updateInterval = null;
-
-        this.updateShown = false;
     }
 
     async start() {
-
-        await this.checkForUpdates();
-
-        this.updateInterval = setInterval(
-            () => this.checkForUpdates(),
-            180000
-        );
-
         await this.loadAllReplacements();
-
         this.inject();
 
         this.observer = new MutationObserver(() => {
@@ -49,167 +31,65 @@ module.exports = class PirateSpeak {
             subtree: true
         });
 
-        console.log("[msg algorithm] started");
+        console.log("[msg algorithm remote] started");
     }
 
     stop() {
-
         this.observer?.disconnect();
 
-        clearInterval(this.updateInterval);
-
         document.getElementById("pirate-btn")?.remove();
-
         document.getElementById("pirate-menu")?.remove();
 
-        console.log("[msg algorithm] stopped");
-    }
-
-    async checkForUpdates() {
-
-        try {
-
-            const url =
-                "https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js";
-
-            const res = await fetch(
-                url + "?cache=" + Date.now(),
-                {
-                    cache: "no-store"
-                }
-            );
-
-            if (!res.ok) {
-                return;
-            }
-
-            const text = await res.text();
-
-            const match = text.match(
-                /@version\s+([0-9.]+)/
-            );
-
-            if (!match) {
-                return;
-            }
-
-            const remoteVersion = match[1];
-
-            if (
-                remoteVersion !== this.currentVersion &&
-                !this.updateShown
-            ) {
-
-                this.updateShown = true;
-
-                BdApi.UI.showConfirmationModal(
-                    "msg algorithm update available",
-
-                    `Version ${remoteVersion} is available.`,
-
-                    {
-                        confirmText: "Open Download",
-
-                        cancelText: "Ignore",
-
-                        onConfirm: () => {
-                            window.open(url);
-                        }
-                    }
-                );
-
-                console.log(
-                    `[msg algorithm] update found: ${remoteVersion}`
-                );
-            }
-
-        } catch (err) {
-
-            console.error(
-                "[msg algorithm] update check failed",
-                err
-            );
-        }
+        console.log("[msg algorithm remote] stopped");
     }
 
     async loadAllReplacements() {
-
         await Promise.all([
-
             this.loadReplacements(
                 "pirate",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/updatedlist.json"
             ),
-
             this.loadReplacements(
                 "british",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/britishworking.json"
             )
-
         ]);
     }
 
     async loadReplacements(mode, url) {
-
         try {
-
             const res = await fetch(url);
 
-            if (!res.ok) {
-                throw new Error(`HTTP ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-            const json = await res.json();
+            this.replacementsMap[mode] = await res.json();
 
-            this.replacementsMap[mode] = json;
-
-            console.log(
-                `[msg algorithm] ${mode} replacements loaded`
-            );
-
+            console.log(`[msg algorithm remote] ${mode} loaded`);
         } catch (err) {
-
-            console.error(
-                `[msg algorithm] Failed to load ${mode}:`,
-                err
-            );
-
+            console.error(`[msg algorithm remote] failed ${mode}`, err);
             this.replacementsMap[mode] = {};
         }
     }
 
     inject() {
+        if (document.getElementById("pirate-btn")) return;
 
-        if (document.getElementById("pirate-btn")) {
-            return;
-        }
-
-        const textbox = document.querySelector(
-            "div[role='textbox']"
-        );
-
+        const textbox = document.querySelector("div[role='textbox']");
         if (!textbox) return;
 
         const form = textbox.closest("form");
-
         if (!form) return;
 
-        const buttonRow = form.querySelector(
-            "div[class*='buttons']"
-        );
-
+        const buttonRow = form.querySelector("div[class*='buttons']");
         if (!buttonRow) return;
 
         const button = document.createElement("button");
 
         button.id = "pirate-btn";
-
         button.type = "button";
 
         const img = document.createElement("img");
-
-        img.src =
-            "https://i.imgur.com/f5S4Z3F.png";
+        img.src = "https://i.imgur.com/f5S4Z3F.png";
 
         Object.assign(img.style, {
             width: "20px",
@@ -229,64 +109,29 @@ module.exports = class PirateSpeak {
             padding: "0"
         });
 
-        button.onmouseenter = () => {
-            button.style.opacity = "1";
-        };
-
-        button.onmouseleave = () => {
-            button.style.opacity = "0.8";
-        };
-
         button.onclick = (e) => {
-
             e.preventDefault();
-
             this.runMode();
         };
 
         button.oncontextmenu = (e) => {
-
             e.preventDefault();
-
-            this.openMenu(
-                e.clientX,
-                e.clientY
-            );
+            this.openMenu(e.clientX, e.clientY);
         };
 
         buttonRow.appendChild(button);
     }
 
     runMode() {
+        const replacements = this.replacementsMap[this.mode];
 
-        if (this.mode === "placeholder") {
-
-            this.placeholderify();
-
-            return;
-        }
-
-        const replacements =
-            this.replacementsMap[this.mode];
-
-        if (!replacements) {
-
-            console.warn(
-                `[msg algorithm] ${this.mode} replacements not loaded yet`
-            );
-
-            return;
-        }
+        if (!replacements) return;
 
         this.transform(replacements);
     }
 
     transform(replacements) {
-
-        const textbox = document.querySelector(
-            "div[role='textbox']"
-        );
-
+        const textbox = document.querySelector("div[role='textbox']");
         if (!textbox) return;
 
         let text = textbox.innerText;
@@ -294,51 +139,27 @@ module.exports = class PirateSpeak {
         let transformed = text
             .split(/\b/)
             .map(word => {
+                const lower = word.toLowerCase();
+                const options = replacements[lower];
 
-                const lower =
-                    word.toLowerCase();
+                if (!options) return word;
 
-                const options =
-                    replacements[lower];
+                const totalWeight = options.reduce((a, [, w]) => a + w, 0);
 
-                if (!options) {
-                    return word;
-                }
+                let rand = Math.random() * totalWeight;
 
-                const totalWeight =
-                    options.reduce(
-                        (sum, [, weight]) =>
-                            sum + weight,
-                        0
-                    );
-
-                let rand =
-                    Math.random() *
-                    totalWeight;
-
-                for (const [
-                    replacement,
-                    weight
-                ] of options) {
-
+                for (const [rep, weight] of options) {
                     rand -= weight;
-
-                    if (rand <= 0) {
-                        return replacement;
-                    }
+                    if (rand <= 0) return rep;
                 }
 
                 return options[0][0];
             })
             .join("");
 
-        if (this.mode === "pirate") {
-
-            transformed += " 🏴‍☠️";
-        }
+        if (this.mode === "pirate") transformed += " 🏴‍☠️";
 
         if (this.mode === "british") {
-
             const endings = [
                 ", good sir.",
                 ", my liege.",
@@ -347,301 +168,85 @@ module.exports = class PirateSpeak {
                 "."
             ];
 
-            transformed += endings[
-                Math.floor(
-                    Math.random() *
-                    endings.length
-                )
-            ];
+            transformed += endings[Math.floor(Math.random() * endings.length)];
         }
 
-        this.replaceTextboxText(
-            textbox,
-            transformed
-        );
+        this.replaceTextboxText(textbox, transformed);
     }
 
-    placeholderify() {
-
-        const textbox = document.querySelector(
-            "div[role='textbox']"
-        );
-
-        if (!textbox) return;
-
-        let text = textbox.innerText;
-
-        let transformed = text
-            .replace(/[rl]/g, "w")
-            .replace(/[RL]/g, "W")
-            .replace(/na/g, "nya")
-            .replace(/ne/g, "nye")
-            .replace(/ni/g, "nyi")
-            .replace(/no/g, "nyo")
-            .replace(/nu/g, "nyu");
-
-        transformed = transformed
-            .split(/\b/)
-            .map(word => {
-
-                if (
-                    /^[a-zA-Z]/.test(word) &&
-                    Math.random() < 0.25
-                ) {
-
-                    return (
-                        word[0] +
-                        "-" +
-                        word
-                    );
-                }
-
-                return word;
-            })
-            .join("");
-
-        const faces = [
-            " uwu",
-            " owo",
-            " >w<",
-            " ^w^"
-        ];
-
-        if (Math.random() < 0.8) {
-
-            transformed += faces[
-                Math.floor(
-                    Math.random() *
-                    faces.length
-                )
-            ];
-        }
-
-        this.replaceTextboxText(
-            textbox,
-            transformed
-        );
-    }
-
-    replaceTextboxText(
-        textbox,
-        newText
-    ) {
-
+    replaceTextboxText(textbox, newText) {
         textbox.focus();
+        document.execCommand("selectAll", false, null);
 
-        document.execCommand(
-            "selectAll",
-            false,
-            null
-        );
+        const data = new DataTransfer();
+        data.setData("text/plain", newText);
 
-        const data =
-            new DataTransfer();
+        const event = new ClipboardEvent("paste", {
+            clipboardData: data,
+            bubbles: true
+        });
 
-        data.setData(
-            "text/plain",
-            newText
-        );
-
-        const pasteEvent =
-            new ClipboardEvent(
-                "paste",
-                {
-                    clipboardData: data,
-                    bubbles: true
-                }
-            );
-
-        textbox.dispatchEvent(
-            pasteEvent
-        );
+        textbox.dispatchEvent(event);
     }
 
     openMenu(x, y) {
+        document.getElementById("pirate-menu")?.remove();
 
-        document.getElementById(
-            "pirate-menu"
-        )?.remove();
-
-        const menu =
-            document.createElement("div");
+        const menu = document.createElement("div");
 
         menu.id = "pirate-menu";
 
         Object.assign(menu.style, {
             position: "fixed",
-            bottom:
-                `${window.innerHeight - y}px`,
+            bottom: `${window.innerHeight - y}px`,
             left: `${x}px`,
             width: "220px",
             background: "#2b2d31",
             borderRadius: "8px",
-            boxShadow:
-                "0 8px 24px rgba(0,0,0,0.5)",
             zIndex: "999999",
-            fontFamily: "sans-serif",
             overflow: "hidden",
-            border:
-                "1px solid #1e1f22"
+            border: "1px solid #1e1f22"
         });
 
-        const header =
-            document.createElement("div");
+        const header = document.createElement("div");
+
+        header.innerText = "mode select";
 
         Object.assign(header.style, {
-            display: "flex",
-            justifyContent:
-                "space-between",
-            alignItems: "center",
             padding: "10px",
+            color: "#fff",
             background: "#232428",
-            fontSize: "14px",
-            fontWeight: "600",
-            color: "#fff"
+            fontWeight: "600"
         });
-
-        header.innerText =
-            "mode select";
-
-        const closeBtn =
-            document.createElement("div");
-
-        closeBtn.innerText = "✕";
-
-        Object.assign(closeBtn.style, {
-            cursor: "pointer",
-            color: "#b5bac1",
-            fontSize: "14px"
-        });
-
-        closeBtn.onmouseenter =
-            () => {
-                closeBtn.style.color =
-                    "#fff";
-            };
-
-        closeBtn.onmouseleave =
-            () => {
-                closeBtn.style.color =
-                    "#b5bac1";
-            };
-
-        closeBtn.onclick = () => {
-            menu.remove();
-        };
-
-        header.appendChild(closeBtn);
 
         menu.appendChild(header);
 
-        const optionsContainer =
-            document.createElement("div");
+        const makeOption = (label, mode) => {
+            const opt = document.createElement("div");
 
-        optionsContainer.style.padding =
-            "6px";
+            opt.innerText = label;
 
-        const makeOption = (
-            label,
-            mode
-        ) => {
-
-            const option =
-                document.createElement(
-                    "div"
-                );
-
-            option.innerText = label;
-
-            Object.assign(option.style, {
+            Object.assign(opt.style, {
                 padding: "8px 10px",
-                borderRadius: "4px",
                 cursor: "pointer",
-                color: "#dbdee1",
-                fontSize: "14px",
-                marginBottom: "2px",
-                background:
-                    this.mode === mode
-                        ? "#404249"
-                        : "transparent"
+                color: "#dbdee1"
             });
 
-            option.onmouseenter =
-                () => {
-
-                    if (
-                        this.mode !== mode
-                    ) {
-                        option.style.background =
-                            "#35373c";
-                    }
-                };
-
-            option.onmouseleave =
-                () => {
-
-                    option.style.background =
-                        this.mode === mode
-                            ? "#404249"
-                            : "transparent";
-                };
-
-            option.onclick = () => {
-
+            opt.onclick = () => {
                 this.mode = mode;
-
                 menu.remove();
             };
 
-            return option;
+            return opt;
         };
 
-        optionsContainer.appendChild(
-            makeOption(
-                "🍺 Pirate-ifier",
-                "pirate"
-            )
-        );
+        const container = document.createElement("div");
+        container.appendChild(makeOption("Pirate", "pirate"));
+        container.appendChild(makeOption("Uwu", "placeholder"));
+        container.appendChild(makeOption("British", "british"));
 
-        optionsContainer.appendChild(
-            makeOption(
-                "🐾 Uwu-ifier",
-                "placeholder"
-            )
-        );
+        menu.appendChild(container);
 
-        optionsContainer.appendChild(
-            makeOption(
-                "☕ British-ifier",
-                "british"
-            )
-        );
-
-        menu.appendChild(
-            optionsContainer
-        );
-
-        document.body.appendChild(
-            menu
-        );
-
-        setTimeout(() => {
-
-            document.addEventListener(
-                "click",
-                (e) => {
-
-                    if (
-                        !menu.contains(
-                            e.target
-                        )
-                    ) {
-                        menu.remove();
-                    }
-                },
-                { once: true }
-            );
-
-        }, 0);
+        document.body.appendChild(menu);
     }
 };
