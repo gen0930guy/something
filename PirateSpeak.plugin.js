@@ -1,7 +1,7 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.1
+ * @version 1.0.2
  * @description Message TRANSFORMER NOW!!!! RAHHH
  * @source https://github.com/gen0930guy/something
  * @updateUrl https://raw.githubusercontent.com/gen0930guy/something/main/PirateSpeak.plugin.js
