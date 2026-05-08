@@ -248,7 +248,8 @@ module.exports = class PirateSpeak {
             " uwu",
             " owo",
             " >w<",
-            " ^w^"
+            " ^w^",
+            ", nya~
         ];
 
         if (Math.random() < 0.8) {
