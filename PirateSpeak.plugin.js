@@ -1,8 +1,8 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.3
- * @description burp
+ * @version 1.0.2
+ * @description jsadn
  */
 
 module.exports = class PirateSpeak {
@@ -167,21 +167,22 @@ module.exports = class PirateSpeak {
             })
             .join("");
 
-if (this.mode === "pirate") {
-    transformed += " 🏴‍☠️";
-}
+        if (this.mode === "pirate") transformed += " 🏴‍☠️";
 
-if (this.mode === "british") {
-    const endings = [
-        ", good sir.",
-        ", my liege.",
-        ", I daresay.",
-        ", if it please thee.",
-        "."
-    ];
+        if (this.mode === "british") {
+            const endings = [
+                ", good sir.",
+                ", my liege.",
+                ", I daresay.",
+                ", if it please thee.",
+                "."
+            ];
 
-    transformed += endings[Math.floor(Math.random() * endings.length)];
-}
+            transformed += endings[Math.floor(Math.random() * endings.length)];
+        }
+
+        this.replaceTextboxText(textbox, transformed);
+    }
 
     replaceTextboxText(textbox, newText) {
         textbox.focus();
@@ -249,9 +250,9 @@ if (this.mode === "british") {
         };
 
         const container = document.createElement("div");
-        container.appendChild(makeOption("🦜 Pirate", "pirate"));
-        container.appendChild(makeOption("🐈 Uwu~", "placeholder"));
-        container.appendChild(makeOption("☕ British", "british"));
+        container.appendChild(makeOption("Pirate", "pirate"));
+        container.appendChild(makeOption("Uwu", "placeholder"));
+        container.appendChild(makeOption("British", "british"));
 
         menu.appendChild(container);
 
