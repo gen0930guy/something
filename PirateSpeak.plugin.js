@@ -167,33 +167,19 @@ module.exports = class PirateSpeak {
             })
             .join("");
 
-let endings = [];
-
 if (this.mode === "pirate") {
     transformed += " 🏴‍☠️";
 }
 
 if (this.mode === "british") {
-    endings = [
+    const endings = [
         ", good sir.",
         ", my liege.",
         ", I daresay.",
         ", if it please thee.",
         "."
     ];
-}
 
-if (this.mode === "placeholder") {
-    endings = [
-        " UwU",
-        " OwO",
-        " ^_^",
-        ", nyaa~",
-        ", hehe~"
-    ];
-}
-
-if (endings.length) {
     transformed += endings[Math.floor(Math.random() * endings.length)];
 }
 
