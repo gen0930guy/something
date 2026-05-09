@@ -165,7 +165,7 @@ module.exports = class PirateSpeak {
         const suffixes = [" UwU", " OwO", " :3", " x3", " >w<", ""];
         const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
 
-        return w + suffix;
+        return w;
       }
 
 
