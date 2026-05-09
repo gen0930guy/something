@@ -177,7 +177,7 @@ let transformed = text.split(/\s+/).map(word => {
       }
 
       return options[0][0];
-}).join("");
+}).join(" ");
 
 if (this.mode === "uwu") {
   const suffixes = [" UwU", " OwO", " :3", " x3", " >w<", ""];
