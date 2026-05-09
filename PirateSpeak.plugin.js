@@ -1,13 +1,14 @@
 /**
  * @name msg algorithm
  * @author gen0930
- * @version 1.0.2
+ * @version 1.0.5
  * @description jsadn
  */
 
 module.exports = class PirateSpeak {
 
     constructor() {
+
         this.mode = "pirate";
 
         this.replacementsMap = {
@@ -20,11 +21,12 @@ module.exports = class PirateSpeak {
     }
 
     async start() {
+
         console.log("[remote plugin] start() called");
 
         await this.loadAllReplacements();
 
-        // wait for Discord UI safely
+        // safely wait for discord ui
         this._interval = setInterval(() => {
             this.inject();
         }, 1500);
@@ -42,9 +44,11 @@ module.exports = class PirateSpeak {
     }
 
     stop() {
+
         console.log("[remote plugin] stop() called");
 
         this.observer?.disconnect();
+
         clearInterval(this._interval);
 
         document.getElementById("pirate-btn")?.remove();
@@ -52,11 +56,13 @@ module.exports = class PirateSpeak {
     }
 
     async loadAllReplacements() {
+
         await Promise.all([
             this.loadReplacements(
                 "pirate",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/updatedlist.json"
             ),
+
             this.loadReplacements(
                 "british",
                 "https://raw.githubusercontent.com/gen0930guy/something/main/britishworking.json"
@@ -65,31 +71,50 @@ module.exports = class PirateSpeak {
     }
 
     async loadReplacements(mode, url) {
+
         try {
+
             const res = await fetch(url);
 
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}`);
+            }
 
             this.replacementsMap[mode] = await res.json();
 
             console.log(`[remote plugin] loaded ${mode}`);
+
         } catch (err) {
+
             console.error(`[remote plugin] failed ${mode}`, err);
+
             this.replacementsMap[mode] = {};
         }
     }
 
     inject() {
-        if (document.getElementById("pirate-btn")) return;
+
+        if (document.getElementById("pirate-btn")) {
+            return;
+        }
 
         const textbox = document.querySelector("div[role='textbox']");
-        if (!textbox) return;
+
+        if (!textbox) {
+            return;
+        }
 
         const form = textbox.closest("form");
-        if (!form) return;
+
+        if (!form) {
+            return;
+        }
 
         const buttonRow = form.querySelector("div[class*='buttons']");
-        if (!buttonRow) return;
+
+        if (!buttonRow) {
+            return;
+        }
 
         const button = document.createElement("button");
 
@@ -97,6 +122,7 @@ module.exports = class PirateSpeak {
         button.type = "button";
 
         const img = document.createElement("img");
+
         img.src = "https://i.imgur.com/f5S4Z3F.png";
 
         Object.assign(img.style, {
@@ -116,16 +142,25 @@ module.exports = class PirateSpeak {
             padding: "0"
         });
 
-        button.onmouseenter = () => button.style.opacity = "1";
-        button.onmouseleave = () => button.style.opacity = "0.8";
+        button.onmouseenter = () => {
+            button.style.opacity = "1";
+        };
+
+        button.onmouseleave = () => {
+            button.style.opacity = "0.8";
+        };
 
         button.onclick = (e) => {
+
             e.preventDefault();
+
             this.runMode();
         };
 
         button.oncontextmenu = (e) => {
+
             e.preventDefault();
+
             this.openMenu(e.clientX, e.clientY);
         };
 
@@ -133,43 +168,73 @@ module.exports = class PirateSpeak {
     }
 
     runMode() {
+
+        // uwu mode handled separately
+        if (this.mode === "uwu") {
+
+            this.transformUwu();
+
+            return;
+        }
+
         const replacements = this.replacementsMap[this.mode];
 
-        if (!replacements) return;
+        if (!replacements) {
+            return;
+        }
 
         this.transform(replacements);
     }
 
     transform(replacements) {
+
         const textbox = document.querySelector("div[role='textbox']");
-        if (!textbox) return;
+
+        if (!textbox) {
+            return;
+        }
 
         let text = textbox.innerText;
 
         let transformed = text
             .split(/\b/)
             .map(word => {
+
                 const lower = word.toLowerCase();
+
                 const options = replacements[lower];
 
-                if (!options) return word;
+                if (!options) {
+                    return word;
+                }
 
-                const totalWeight = options.reduce((a, [, w]) => a + w, 0);
+                const totalWeight = options.reduce(
+                    (a, [, w]) => a + w,
+                    0
+                );
 
                 let rand = Math.random() * totalWeight;
 
                 for (const [rep, weight] of options) {
+
                     rand -= weight;
-                    if (rand <= 0) return rep;
+
+                    if (rand <= 0) {
+                        return rep;
+                    }
                 }
 
                 return options[0][0];
             })
             .join("");
 
-        if (this.mode === "pirate") transformed += " 🏴‍☠️";
+        if (this.mode === "pirate") {
+
+            transformed += " 🏴‍☠️";
+        }
 
         if (this.mode === "british") {
+
             const endings = [
                 ", good sir.",
                 ", my liege.",
@@ -178,29 +243,148 @@ module.exports = class PirateSpeak {
                 "."
             ];
 
-            transformed += endings[Math.floor(Math.random() * endings.length)];
+            transformed += endings[
+                Math.floor(Math.random() * endings.length)
+            ];
         }
 
         this.replaceTextboxText(textbox, transformed);
     }
 
+    transformUwu() {
+
+        const textbox = document.querySelector("div[role='textbox']");
+
+        if (!textbox) {
+            return;
+        }
+
+        let text = textbox.innerText;
+
+        let transformed = text
+
+
+            .replace(/na/g, "nya") 
+            .replace(/ne/g, "nye") 
+            .replace(/ni/g, "nyi") 
+            .replace(/no/g, "nyo") 
+            .replace(/nu/g, "nyu");
+
+            .replace(/na/gi, match =>
+                match[0] === "N" ? "Nya" : "nya"
+            )
+
+            .replace(/ne/gi, match =>
+                match[0] === "N" ? "Nye" : "nye"
+            )
+
+            .replace(/ni/gi, match =>
+                match[0] === "N" ? "Nyi" : "nyi"
+            )
+
+            .replace(/no/gi, match =>
+                match[0] === "N" ? "Nyo" : "nyo"
+            )
+
+            .replace(/nu/gi, match =>
+                match[0] === "N" ? "Nyu" : "nyu"
+            )
+
+            // special words
+            .replace(/\bhi+\b/gi, () => {
+
+                return Math.random() < 0.5
+                    ? "hai"
+                    : "haiiii";
+            })
+
+            // cute speech
+            .replace(/ove/gi, "uv")
+
+            .replace(/th/gi, match => {
+
+                if (match === "TH") {
+                    return "D";
+                }
+
+                if (match[0] === "T") {
+                    return "D";
+                }
+
+                return "d";
+            })
+
+            // random stuttering
+            .split(" ")
+
+            .map(word => {
+
+                if (
+                    word.length > 2 &&
+                    Math.random() < 0.20 &&
+                    /^[a-z]/i.test(word)
+                ) {
+
+                    return `${word[0]}-${word}`;
+                }
+
+                return word;
+            })
+
+            .join(" ");
+
+        // random furry endings
+        const endings = [
+            " UwU",
+            " OwO",
+            " >w<",
+            " ~w~",
+            " :3",
+            " nya~",
+            " rawr x3",
+            " ^w^"
+        ];
+
+        transformed += endings[
+            Math.floor(Math.random() * endings.length)
+        ];
+
+        this.replaceTextboxText(textbox, transformed);
+    }
+
     replaceTextboxText(textbox, newText) {
+
         textbox.focus();
-        document.execCommand("selectAll", false, null);
+
+        document.execCommand(
+            "selectAll",
+            false,
+            null
+        );
 
         const data = new DataTransfer();
-        data.setData("text/plain", newText);
 
-        const event = new ClipboardEvent("paste", {
-            clipboardData: data,
-            bubbles: true
-        });
+        data.setData(
+            "text/plain",
+            newText
+        );
+
+        const event = new ClipboardEvent(
+            "paste",
+            {
+                clipboardData: data,
+                bubbles: true
+            }
+        );
 
         textbox.dispatchEvent(event);
     }
 
     openMenu(x, y) {
-        document.getElementById("pirate-menu")?.remove();
+
+        document.getElementById(
+            "pirate-menu"
+        )?.remove();
 
         const menu = document.createElement("div");
 
@@ -219,6 +403,7 @@ module.exports = class PirateSpeak {
         });
 
         const header = document.createElement("div");
+
         header.innerText = "mode select";
 
         Object.assign(header.style, {
@@ -231,6 +416,7 @@ module.exports = class PirateSpeak {
         menu.appendChild(header);
 
         const makeOption = (label, mode) => {
+
             const opt = document.createElement("div");
 
             opt.innerText = label;
@@ -241,21 +427,67 @@ module.exports = class PirateSpeak {
                 color: "#dbdee1"
             });
 
+            opt.onmouseenter = () => {
+                opt.style.background = "#35373c";
+            };
+
+            opt.onmouseleave = () => {
+                opt.style.background = "transparent";
+            };
+
             opt.onclick = () => {
+
                 this.mode = mode;
+
                 menu.remove();
+
+                console.log(
+                    `[remote plugin] mode set to ${mode}`
+                );
             };
 
             return opt;
         };
 
         const container = document.createElement("div");
-        container.appendChild(makeOption("Pirate", "pirate"));
-        container.appendChild(makeOption("Uwu", "placeholder"));
-        container.appendChild(makeOption("British", "british"));
+
+        container.appendChild(
+            makeOption("Pirate", "pirate")
+        );
+
+        container.appendChild(
+            makeOption("Uwu", "uwu")
+        );
+
+        container.appendChild(
+            makeOption("British", "british")
+        );
 
         menu.appendChild(container);
 
         document.body.appendChild(menu);
+
+        // close on outside click
+        setTimeout(() => {
+
+            const close = (e) => {
+
+                if (!menu.contains(e.target)) {
+
+                    menu.remove();
+
+                    document.removeEventListener(
+                        "mousedown",
+                        close
+                    );
+                }
+            };
+
+            document.addEventListener(
+                "mousedown",
+                close
+            );
+
+        }, 0);
     }
 };
