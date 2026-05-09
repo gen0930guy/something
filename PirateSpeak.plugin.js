@@ -181,7 +181,13 @@ module.exports = class PirateSpeak {
       }
 
       return options[0][0];
-    }).join("");
+}).join("");
+
+if (this.mode === "uwu") {
+  const suffixes = [" UwU", " OwO", " :3", " x3", " >w<", ""];
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+  transformed += suffix;
+}
 
     if (this.mode === "pirate") transformed += " 🏴‍☠️";
 
