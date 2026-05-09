@@ -141,7 +141,7 @@ module.exports = class PirateSpeak {
 
     let text = textbox.innerText;
 
-    let transformed = text.split(/\b/).map(word => {
+let transformed = text.split(/\s+/).map(word => {
       const lower = word.toLowerCase();
 
 
@@ -160,10 +160,6 @@ module.exports = class PirateSpeak {
           const isUpper = m === m.toUpperCase();
           return isUpper ? "W" : "w";
         });
-
-
-        const suffixes = [" UwU", " OwO", " :3", " x3", " >w<", ""];
-        const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
 
         return w;
       }
